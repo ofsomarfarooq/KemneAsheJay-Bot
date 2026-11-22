@@ -1,64 +1,88 @@
-# KemneAsheJay — Discord Voice Logger & Anti-Spam Bot
+# KemneAsheJay-Bot
 
-A lightweight, 24/7 Discord utility and moderation bot built with **Python** and **`discord.py`**. It logs real-time voice channel activity directly inside each voice channel's built-in text chat and automatically protects servers against compromised-account spam waves.
+A lightweight, 24/7 Discord utility and moderation bot built with Python (`discord.py`). It tracks who joins, leaves, or switches voice channels directly inside each voice channel's text chat, and automatically stops hacked-account spam waves before they flood your server.
 
----
+## What It Does
 
-## Features
-
-- **Voice Channel Activity Logger**
-  - Posts live updates in the voice channel's text chat when members **join**, **leave**, or **switch** voice channels.
-  - Ignores mute, deafen, and stream toggles to keep chat clean.
-- **Anti-Spam / Hacked Account Protection**
-  - Tracks both **text** and **image/file attachments** (by filename and size) across all channels.
-  - Automatically triggers when a user sends `5` identical messages within `60` seconds.
-  - **24-Hour Timeout:** Mutes the offending account automatically.
-  - **Auto-Cleanup:** Deletes all detected spam messages across every channel.
-  - **Safe Audit Alert:** Logs the incident and safely quotes the original message (with `@everyone`/`@here` pings disabled) in case it was legitimate.
-- **Secure Token Handling**
-  - Uses `python-dotenv` to load the bot token from a `.env` file—no hardcoded secrets.
+- **Voice Channel Logger:** Posts real-time updates in the voice channel's built-in text chat whenever someone joins, leaves, or moves to another voice channel (ignores mute, deafen, and stream toggles).
+- **Anti-Spam / Hacked Account Protection:**
+  - Watches for repeated messages (both text and images/files) across all channels.
+  - If a user sends the same message **5 times within 60 seconds**, the bot automatically:
+    1. **Mutes (timeouts)** the user for **24 hours**.
+    2. **Deletes** all of their spam messages.
+    3. **Logs an alert** with the original message safely quoted (with `@everyone`/`@here` pings disabled) in case it was actually important.
 
 ---
 
-## Step 1: Create & Invite Your Discord Bot
+## Step 1: Set Up Your Discord Bot
+
+Before hosting, create your bot on Discord:
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and click **New Application**.
-2. Open the **Bot** tab on the left:
-   - Click **Reset Token** and copy your bot token (keep this secret).
-   - Scroll down to **Privileged Gateway Intents** and enable **Message Content Intent**, then click **Save Changes**.
+2. Open the **Bot** tab:
+   - Click **Reset Token** and copy your token (keep it private).
+   - Under **Privileged Gateway Intents**, turn **ON** **Message Content Intent** and click **Save Changes**.
 3. Open **OAuth2 > URL Generator**:
-   - Under **Scopes**, check `bot`.
-   - Under **Bot Permissions**, check:
-     - `View Channels`
-     - `Send Messages`
-     - `Manage Messages`
-     - `Moderate Members` (Timeout Members)
-4. Copy the generated URL, open it in your browser, and invite the bot to your server.
-5. **Important (Role Hierarchy):** In your Discord server, go to **Server Settings > Roles** and drag the bot's role **above** regular member roles. Otherwise, Discord will block the bot from timing out spammers.
+   - **Scopes:** Check `bot`.
+   - **Bot Permissions:** Check `View Channels`, `Send Messages`, `Manage Messages`, and `Moderate Members`.
+4. Open the generated invite link and add the bot to your server.
+5. **Important:** In your Discord server, go to **Server Settings > Roles** and drag the bot's role **above** regular member roles. If it's below them, Discord won't allow the bot to mute spammers.
 
 ---
 
-## Step 2: Host 24/7 for Free on Wispbyte (Recommended)
+## Step 2: Choose How to Host It
 
-You can run this bot 24/7 without keeping your PC on using [Wispbyte](https://wispbyte.com/) (free tier, no credit card required):
+### Option A: Host 24/7 for Free on Wispbyte (No PC Needed)
 
-1. **Create a Server:**
-   - Sign in to Wispbyte and click **+ Create server**.
-   - Select **Python** as the runtime, give your server a name, and click **Create server**.
-2. **Upload Files:**
-   - Open **Server Management > Files** and upload `bot.py` and `requirements.txt`.
-3. **Set the Startup File:**
-   - Go to **Configuration > Startup**.
-   - Under **Variables**, change **App py file** from `main.py` to `bot.py`.
-   - Leave **Requirements file** as `requirements.txt`.
-4. **Add Your Bot Token:**
-   - Go to **Configuration > Environment** and click **+ Create it** to create a `/.env` file.
-   - Add a new variable:
-     - **Name:** `DISCORD_TOKEN`
-     - **Value:** *(Paste your Discord bot token)*
+1. Sign in to [Wispbyte](https://wispbyte.com/) and click **+ Create server**.
+2. Choose **Python**, give your server a name, and click **Create server**.
+3. Go to **Server Management > Files** and upload `bot.py` and `requirements.txt` from this repo.
+4. Go to **Configuration > Startup** and change **App py file** from `main.py` to `bot.py`.
+5. Go to **Configuration > Environment**, click **+ Create it** to make a `/.env` file, and add:
+   - **Name:** `DISCORD_TOKEN`
+   - **Value:** *(Paste your Discord bot token)*
    - Click **Save changes**.
-5. **Start the Bot:**
-   - Go to **Server Management > Console** and click **Start**.
-   - Once the console installs dependencies and prints `Logged in as <BotName>`, your bot is live 24/7.
+6. Go to **Server Management > Console** and click **Start**. Once it prints `Logged in as <YourBot>`, it's live 24/7.
 
-> **Wispbyte Free Tier Note:** Log in to the Wispbyte dashboard at least once every **14 days** (with adblocker disabled on the panel) to keep the free server active.
+> **Note:** On Wispbyte's free plan, log in to the panel at least once every **14 days** (with adblocker off) to keep the server running.
+
+---
+
+### Option B: Run Locally on Your PC
+
+Make sure you have **Python 3.10+** installed.
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/ofsomarfarooq/KemneAsheJay-Bot.git](https://github.com/ofsomarfarooq/KemneAsheJay-Bot.git)
+   cd KemneAsheJay-Bot
+   ```
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Add your bot token:**
+   Create a file named `.env` in the project folder and add:
+   ```env
+   DISCORD_TOKEN=your_discord_bot_token_here
+   ```
+4. **Start the bot:**
+   ```bash
+   python bot.py
+   ```
+   *(The bot will stay online as long as the terminal window remains open.)*
+
+---
+
+## Customization
+
+You can adjust the anti-spam settings at the top of `bot.py`:
+
+| Setting | Default | What It Controls |
+| :--- | :--- | :--- |
+| `SPAM_THRESHOLD` | `5` | Number of identical messages needed to trigger a mute. |
+| `TIME_WINDOW` | `60` | Time window (in seconds) to count repeated messages. |
+| `MUTE_HOURS` | `24` | Length of the automatic timeout in hours. |
+| `LOG_CHANNEL_ID` | `None` | Channel ID where alerts are sent (`None` posts in the channel where spam happened). |
+
+*To use a dedicated `LOG_CHANNEL_ID`, turn on **Developer Mode** in Discord (**Settings > Advanced**), right-click your log channel → **Copy Channel ID**, and replace `None` with that number.*
