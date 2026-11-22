@@ -1,4 +1,4 @@
-# KemneAsheJay-Bot
+# KemneAsheJay — Discord Voice Logger & Anti-Spam Bot
 
 A lightweight, 24/7 Discord utility and moderation bot built with Python (`discord.py`). It tracks who joins, leaves, or switches voice channels directly inside each voice channel's text chat, and automatically stops hacked-account spam waves before they flood your server.
 
